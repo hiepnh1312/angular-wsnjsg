@@ -55,7 +55,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     this.messages = <Subject<Message>>this.connect(url).pipe(
       map((response: MessageEvent): Message => {
-        console.log(response.data);
+        console.log('test', response.data);
         let data = JSON.parse(response.data);
         return data;
       })
@@ -71,7 +71,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       // let arrayBuffer;
       const arrayBuffer = this.convertFileToArrayBuffer(data.blob).then((e) => {
         console.log(e);
-        this.messages.next('test');
+        this.messages.next(e);
+        this.messages.next(new TextEncoder().encode('EOS'));
       });
 
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
@@ -116,10 +117,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     let observer = {
       error: null,
       complete: null,
-      next: (data: Object) => {
+      next: (data: any) => {
         console.log('Message sent to websocket: ', data);
         if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
+          ws.send(data);
         }
       },
     };
