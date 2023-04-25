@@ -71,8 +71,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       // let arrayBuffer;
       const arrayBuffer = this.convertFileToArrayBuffer(data.blob).then((e) => {
         console.log(e);
+        const str: string = 'EOS';
+        const temp: any = new TextEncoder().encode(str);
         this.messages.next(e);
-        this.messages.next(new TextEncoder().encode('EOS'));
+        this.messages.next(temp);
       });
 
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
