@@ -124,7 +124,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       next: (data: any) => {
         console.log('Message sent to websocket: ', data);
         if (ws.readyState === WebSocket.OPEN) {
-          ws.send(data);
+          ws.send(JSON.stringify(data));
         }
       },
     };
