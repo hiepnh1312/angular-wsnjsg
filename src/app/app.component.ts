@@ -74,7 +74,9 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
         const str: string = 'EOS';
         const temp: any = new TextEncoder().encode(str);
         this.messages.next(e);
-        this.messages.next(temp);
+        setTimeout(() => {
+          this.messages.next([69, 79, 83]);
+        }, 250);
       });
 
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
