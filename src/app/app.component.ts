@@ -67,17 +67,33 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       .getRecordedTime()
       .subscribe((time) => (this.recordedTime = time));
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const arrayBuffer = event.target.result as ArrayBuffer;
+        const dataView = new DataView(arrayBuffer);
+        const byteRate = dataView.getUint32(28, true); // Lấy byte rate từ header file audio
+        const chunkSize = byteRate / 4;
+        let offset = 44; // Header file audio là 44 byte
+        while (offset < arrayBuffer.byteLength) {
+          const chunk = new Uint8Array(
+            arrayBuffer.slice(offset, offset + chunkSize)
+          );
+          setTimeout(() => {
+            this.messages.next(chunk);
+          }, 1000);
+          offset += chunkSize;
+        }
+        reader.onloadend = () => {
+          setTimeout(() => {
+            this.messages.next(new TextEncoder().encode('EOS'));
+          }, 1000);
+        };
+      };
       this.teste = data;
-      // let arrayBuffer;
-      const arrayBuffer = this.convertFileToArrayBuffer(data.blob).then((e) => {
-        console.log(e);
-        const str: string = 'EOS';
-        const temp: any = new TextEncoder().encode(str);
-        this.messages.next(e);
-        setTimeout(() => {
-          this.messages.next([69, 79, 83]);
-        }, 250);
-      });
+      const audioContext = new AudioContext();
+
+      reader.readAsArrayBuffer(data.blob);
+      // Đọc file audio và chia nhỏ thành các khung byte
 
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
         URL.createObjectURL(data.blob)
@@ -124,7 +140,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       next: (data: any) => {
         console.log('Message sent to websocket: ', data);
         if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
+          ws.send(data);
         }
       },
     };
