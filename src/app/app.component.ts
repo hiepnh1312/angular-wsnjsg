@@ -51,7 +51,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     private sanitizer: DomSanitizer
   ) {
     const apiKey = 'YOUR_API_KEY';
-    const url = `wss://viettelgroup.ai/voice/api/asr/v1/ws/decode_online?content-type=audio/x-raw,+layout=(string)interleaved,+rate=(int)16000,+format=(string)S16LE,+channels=(int)1&token=anonymous`;
+    const url = `wss://viettelgroup.ai/voice/api/asr/v1/ws/decode_online?content-type=audio/x-raw,+layout=(string)interleaved,+rate=(int)16000,+format=(string)S16LE,+channels=(int)1&token=6ZbkDeEnRgOJKhmzH2ch7wtW5r6DEri1Eww5xcchdM9-gI3DoVancDKqQPO03mE0`;
 
     this.messages = <Subject<Message>>this.connect(url).pipe(
       map((response: MessageEvent): Message => {
@@ -86,7 +86,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
         }
         reader.onloadend = () => {
           setTimeout(() => {
-            this.messages.next(new TextEncoder().encode('EOS'));
+            this.messages.next('EOS');
           }, 2500);
         };
       };
