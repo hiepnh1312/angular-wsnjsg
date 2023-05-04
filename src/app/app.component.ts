@@ -70,9 +70,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       const reader = new FileReader();
       reader.onload = (event) => {
         const arrayBuffer = event.target.result as ArrayBuffer;
+        console.log(arrayBuffer);
         const dataView = new DataView(arrayBuffer);
         const byteRate = dataView.getUint32(28, true); // Lấy byte rate từ header file audio
-        const chunkSize = byteRate / 4;
+        const chunkSize = byteRate / 8;
         let offset = 44; // Header file audio là 44 byte
         while (offset < arrayBuffer.byteLength) {
           const chunk = new Uint8Array(
@@ -80,13 +81,13 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
           );
           setTimeout(() => {
             this.messages.next(chunk);
-          }, 1000);
+          }, 2500);
           offset += chunkSize;
         }
         reader.onloadend = () => {
           setTimeout(() => {
             this.messages.next(new TextEncoder().encode('EOS'));
-          }, 1000);
+          }, 2500);
         };
       };
       this.teste = data;
