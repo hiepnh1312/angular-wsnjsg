@@ -73,7 +73,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
         console.log(arrayBuffer);
         const dataView = new DataView(arrayBuffer);
         const byteRate = dataView.getUint32(28, true); // Lấy byte rate từ header file audio
-        const chunkSize = byteRate / 8;
+        const chunkSize = byteRate / 24;
         let offset = 44; // Header file audio là 44 byte
         while (offset < arrayBuffer.byteLength) {
           const chunk = new Uint8Array(
