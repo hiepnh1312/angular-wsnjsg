@@ -245,7 +245,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   SILENT_THRESHOLD = 1000;
   token = 'ds7koWzvU93282nvJJ1KOXJTv65-HEB7pu4FFpUqtYicKDJ4HgDkkseyGaE0bStJ';
   model = 'TROLYAO';
-
+  results = '';
   toggleRecord() {
     if (this.isStop) {
       this.connectWS();
@@ -362,6 +362,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
         }
 
         console.log('changeAsrText', $this.replaceText(text));
+        $this.results = $this.replaceText(text);
       }
     };
   }
