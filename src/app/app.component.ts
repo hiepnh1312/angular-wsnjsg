@@ -259,10 +259,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     try {
       if (!this.audioContext) {
-        this.audioContext = new (window.AudioContext ||
-          window.webkitAudioContext)();
+        this.audioContext = new window.AudioContext();
         if (this.audioContext.state === 'suspended') {
           this.audioContext.resume();
+          console.log('test');
         }
 
         navigator.mediaDevices
@@ -328,6 +328,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     const $this = this;
     this.ws.onopen = function () {
       $this.connected = true;
+      $this.record();
     };
 
     this.ws.onclose = function () {
